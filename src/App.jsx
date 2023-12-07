@@ -51,7 +51,7 @@ function App() {
     // Setando os estados
     setPickedWord(word);
     setpickedCategory(category);
-    setLetters(latters);
+    setLetters(letters);
 
     setGameStage(stages[1].name);
   };
