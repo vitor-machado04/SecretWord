@@ -1,8 +1,5 @@
-# React + Vite
+# Jogo de Adivinhar Palavra API em React
+Bem-vindo ao README da API do Jogo de Adivinhar Palavra em React! Este projeto é uma API desenvolvida em React para suportar um divertido jogo de adivinhação de palavras.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Pré-requisitos
+Certifique-se de ter o **Node.js** instalado em seu sistema antes de prosseguir.
