@@ -63,33 +63,50 @@ function App() {
 
   // processo do input de letras
   const verifyLetter = (letter) => {
-    
+
     const normalizedLetter = letter.toLowerCase()
 
     // checando se a letra já foi utilizada
-    if(guessedLetters.includes(normalizedLetter) || wrongLetters.includes(normalizedLetter)) {
+    if (guessedLetters.includes(normalizedLetter) || wrongLetters.includes(normalizedLetter)) {
       return;
     }
 
     // removendo chance de jogo caso letra errada
-    if(letters.includes(normalizedLetter)) {
+    if (letters.includes(normalizedLetter)) {
       setGuessedLetters((actualGuessedLetters) => [
         ...actualGuessedLetters,
         normalizedLetter
       ]);
     } else {
-      setGuessedLetters((actualWrongLetters) => [
+      setWrongLetters((actualWrongLetters) => [
         ...actualWrongLetters,
         normalizedLetter
       ]);
 
+      setGuesses((actualGuesses) => actualGuesses - 1);
     }
   };
-  console.log(guessedLetters)
-  console.log(wrongLetters)
+
+  // monitoramento das tentativas do jogo
+  const clearLetterStates = () => {
+    setGuessedLetters([])
+    setWrongLetters([])
+  }
+
+  useEffect(() => {
+    if (guesses <= 0) {
+      // resetar todos os estados para poder reiniciar o jogo zerado 
+      clearLetterStates()
+
+      setGameStage(stages[2].name);
+    }
+  }, [guesses])
 
   // restart do jogo
   const retry = () => {
+    setScore(0);
+    setGuesses(3);
+    
     setGameStage(stages[0].name);
   };
 
@@ -97,8 +114,8 @@ function App() {
     <>
       <div className="App">
         {gameStage === 'start' && <StartScreen startGame={startGame} />}
-        {gameStage === 'game' && <Game verifyLetter={verifyLetter} pickedWord={pickedWord} pickedCategory={pickedCategory} letters={letters} guessedLetters={guessedLetters} wrongLetters={wrongLetters} guesses={guesses} score={score}/>}
-        {gameStage === 'end' && <GameOver retry={retry} />}
+        {gameStage === 'game' && <Game verifyLetter={verifyLetter} pickedWord={pickedWord} pickedCategory={pickedCategory} letters={letters} guessedLetters={guessedLetters} wrongLetters={wrongLetters} guesses={guesses} score={score} />}
+        {gameStage === 'end' && <GameOver retry={retry} score={score} />}
 
       </div>
     </>
