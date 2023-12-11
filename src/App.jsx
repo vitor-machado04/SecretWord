@@ -26,22 +26,23 @@ function App() {
   const [guesses, setGuesses] = useState(3)
   const [score, setScore] = useState(0)
 
-  const pickedWordAndCategory = () => {
+  const pickedWordAndCategory = useCallback(() => {
     // pegando uma categoria aleatória
     const categories = Object.keys(words)
     const category =
       categories[Math.floor(Math.random() * Object.keys(categories).length)];
-    console.log(category)
 
     // pegando uma palavra aleatória
     const word = words[category][Math.floor(Math.random() * words[category].length)]
-    console.log(word)
 
     return { word, category }
-  }
+  },[words]);
 
   // inicializar o jogo de palavras
-  const startGame = () => {
+  const startGame = useCallback(() => {
+    // limpando todas as letras
+    clearLetterStates();
+
     // selecionar palavra e selecionar categoria
     const { word, category } = pickedWordAndCategory();
 
@@ -50,16 +51,13 @@ function App() {
 
     wordLetters = wordLetters.map((l) => l.toLowerCase());
 
-    console.log(word, category)
-    console.log(wordLetters)
-
     // Setando os estados
     setPickedWord(word);
     setpickedCategory(category);
     setLetters(wordLetters);
 
     setGameStage(stages[1].name);
-  };
+  }, [pickedWordAndCategory]);
 
   // processo do input de letras
   const verifyLetter = (letter) => {
@@ -93,6 +91,8 @@ function App() {
     setWrongLetters([])
   }
 
+
+  // monitorando se as chances terminaram 
   useEffect(() => {
     if (guesses <= 0) {
       // resetar todos os estados para poder reiniciar o jogo zerado 
@@ -100,13 +100,28 @@ function App() {
 
       setGameStage(stages[2].name);
     }
-  }, [guesses])
+  }, [guesses]);
+
+  // monitoriando condição de vitória
+  useEffect(() => {
+
+    const uniqueLetters = [... new Set(letters)]
+
+    // condição de vitória
+    if (guessedLetters.length === uniqueLetters.length) {
+      // adicionando pontuação
+      setScore((actualScore) => actualScore += 100)
+
+      // Restartando jogo com uma nova palavra
+      startGame();
+    }
+  }, [guessedLetters, letters, startGame])
 
   // restart do jogo
   const retry = () => {
     setScore(0);
     setGuesses(3);
-    
+
     setGameStage(stages[0].name);
   };
 
